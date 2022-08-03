@@ -25,5 +25,10 @@ public class Artist extends AuditModel{
             mappedBy = "artist")
     private List<SongArtist> songArtistList;
 
+    @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "artist")
+    private ArtistProfile artistProfile;
+
 
 }
