@@ -6,8 +6,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Setter
 @Getter
@@ -21,9 +20,10 @@ public class Song {
     private Long id;
     private String title;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "song")
-    private List<SongArtist> songArtistList;
+    @ManyToMany
+    @JoinTable(name = "song_artists",
+            joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "artists_id"))
+    private Set<Artist> artists = new LinkedHashSet<>();
 
 }

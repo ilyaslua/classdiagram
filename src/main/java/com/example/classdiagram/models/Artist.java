@@ -4,9 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -20,10 +24,6 @@ public class Artist extends AuditModel{
     private Long id;
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "artist")
-    private List<SongArtist> songArtistList;
 
     @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
@@ -31,4 +31,19 @@ public class Artist extends AuditModel{
     private ArtistProfile artistProfile;
 
 
+    @ManyToMany(mappedBy = "artists")
+    private Set<Song> songs = new LinkedHashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Artist artist = (Artist) o;
+        return id != null && Objects.equals(id, artist.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
